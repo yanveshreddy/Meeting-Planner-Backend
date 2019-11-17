@@ -5,7 +5,7 @@ const appConfig = require("../../config/appConfig")
 
 module.exports.setRouter = (app) => {
 
-    let baseUrl = `${appConfig.apiVersion}/user`;
+    let baseUrl = `${appConfig.apiVersion}/users`;
 
 
     app.get(`${baseUrl}/view/all`, auth.isAuthorized, userController.getAllUser);
@@ -153,6 +153,71 @@ module.exports.setRouter = (app) => {
             "message": "Login Successful",
             "status": 200,
             "data": {
+                "authToken": "lkjyJhbGciOiJIUertyuiopojhgfdwertyuVCJ9.MCwiZXhwIjoxNTIwNDI29tIiwibGFzdE5hbWUiE4In19.hAR744xIY9K53JWm1rQ2mc",
+                "userDetails": {
+                "mobileNumber": 2234435524,
+                "email": "anvesh@gmail.com",
+                "lastName": "Reddy",
+                "firstName": "Anvesh",
+                "userId": "-G9zxTYA8"
+            }
+
+        }
+         @apiErrorExample {json} Error-Response:
+	 *
+	 * {
+	    "error": true,
+	    "message": "Failed To Login User",
+	    "status": 500,
+	    "data": null
+	   }
+    */
+
+    // params: email, password.
+
+    app.post(`${baseUrl}/forgotPassword`, userController.forgotPassword);
+    /**
+     * @api {post} /api/v1/users/forgotPassword api to generate Reset Token
+     * @apiVersion 1.0.0
+     * @apiGroup users
+     * 
+     * @apiParam {String} email of the user passed as a body parameter
+     * 
+     *  @apiSuccessExample {json} Success-Response:
+     *  {
+     *   "error":false,
+     *   "message":"Password Reset Token Sent successfully",
+     *   "status":200,
+     *   "data": []
+     *  }
+     *   @apiErrorExample {json} Error-Response:
+     *    {
+     *      "error":true,
+     *      "message":"Error Occured",
+     *      "status":400,
+     *      "data":null
+     *    }
+     */
+
+
+    app.post(`${baseUrl}/resetPassword`, userController.resetPassword);
+
+    /**
+     * @apiGroup users
+     * @apiVersion  1.0.0
+     * @api {post} /api/v1/users/login api for user login.
+     *
+     * @apiParam {String} resetPasswordToken of the user passed as a body parameter
+     * @apiParam {String} Updatedpassword of the user passed as a body parameter
+     *
+     * @apiSuccess {object} myResponse shows error status, message, http status code, result.
+     * 
+     * @apiSuccessExample {object} Success-Response:
+         {
+            "error": false,
+            "message": "Login Successful",
+            "status": 200,
+            "data": {
                 "authToken": "eyJhbGciOiJIUertyuiopojhgfdwertyuVCJ9.MCwiZXhwIjoxNTIwNDI29tIiwibGFzdE5hbWUiE4In19.hAR744xIY9K53JWm1rQ2mc",
                 "userDetails": {
                 "mobileNumber": 2234435524,
@@ -175,7 +240,6 @@ module.exports.setRouter = (app) => {
 
     // params: email, password.
 
-    app.post(`${baseUrl}/forgotPassword`, userController.forgotPassword);
 
     
     app.post(`${baseUrl}/logout`, userController.logout);

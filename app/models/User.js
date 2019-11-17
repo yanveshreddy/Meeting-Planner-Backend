@@ -42,7 +42,7 @@ let userSchema = new Schema({
     default: 'passskdajakdjkadsj'
   },
   resetPasswordToken:{
-    type:String
+    type:String,
   },
   countryCode:{
     type: String,  

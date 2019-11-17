@@ -5,7 +5,7 @@ const appConfig = require("../../config/appConfig")
 
 module.exports.setRouter = (app) => {
 
-    let baseUrl = `${appConfig.apiVersion}/event`;
+    let baseUrl = `${appConfig.apiVersion}/events`;
 
     app.get(`${baseUrl}/:eventId/eventDetails`,eventController.getSingleEventDetails);
 
