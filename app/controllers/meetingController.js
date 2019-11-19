@@ -14,9 +14,9 @@ const meetingModel=mongoose.model('Meeting');
 
 
 
-// start getSinglemeetingDetails function 
+// start getSingleMeetingDetails function 
 
-let getSinglemeetingDetails =(req,res) =>{
+let getSingleMeetingDetails =(req,res) =>{
 
     meetingModel.findOne({ 'meetingId': req.params.meetingId }).exec((err, result) => {
         if (err) {
@@ -36,13 +36,13 @@ let getSinglemeetingDetails =(req,res) =>{
     })
 }
 
-//end getSinglemeetingDetails function
+//end getSingleMeetingDetails function
 
 /****************************************************************************************************/
 
-// start createmeeting function 
+// start createMeeting function 
 
-let createmeeting=(req,res) =>{
+let createMeeting=(req,res) =>{
 
     const meetingId = shortid.generate();
 
@@ -78,13 +78,13 @@ let createmeeting=(req,res) =>{
 
 }
 
-//end createmeeting function
+//end createMeeting function
 
 /****************************************************************************************************/
 
 // start updatemeeting function 
 
-let updatemeeting=(req,res) =>{
+let updateMeeting=(req,res) =>{
 
     let options = req.body;
 
@@ -107,14 +107,37 @@ let updatemeeting=(req,res) =>{
     })
 }
 
-//end updatemeeting function
-
-
+//end updateMeeting function
 /****************************************************************************************************/
 
-// start getmeetingListByUser function 
+//start getAllMeetings function
 
-let getmeetingListByUser=(req,res) =>{
+let getAllMeetings=(req,res) =>{
+
+    meetingModel.find()
+    .select(' -__v -_id')
+    .lean()
+    .exec((err, result) => {
+
+        if (err) {
+            let apiResponse = response.response(true,'Failed to fetch list of meetings ',403, null)
+            res.send(apiResponse)
+        } else if (check.isEmpty(result)) {
+            let apiResponse = response.response(true,'meetings Are not found',500, null)
+            res.send(apiResponse)
+        } else {
+            let apiResponse = response.response(false,'List of meetings', 200, result)
+            res.send(apiResponse)
+        }
+       })
+}
+
+//end getAllMeetings function
+/****************************************************************************************************/
+
+// start getMeetingListByUser function 
+
+let getMeetingListByUser=(req,res) =>{
 
     meetingModel.find({userId:req.body.userId},(err,result)=>{
         if (err) {
@@ -134,13 +157,13 @@ let getmeetingListByUser=(req,res) =>{
 
 }
 
-//end getmeetingListByUser function
-
+//end getMeetingListByUser function
 /****************************************************************************************************/
 
-// start deletemeeting function 
 
-let deletemeeting=(req,res) =>{
+// start deleteMeeting function 
+
+let deleteMeeting=(req,res) =>{
 
     meetingModel.findOneAndRemove({ 'meetingId': req.params.meetingId }).select(' -__v -_id -password').exec((err, result) => {
         if (err) {
@@ -162,9 +185,19 @@ let deletemeeting=(req,res) =>{
         }
     });
 
-
-
 }
 
-//end deletemeeting function
+//end deleteMeeting function
 
+/****************************************************************************************************/
+
+module.exports={
+
+    getSingleMeetingDetails:getSingleMeetingDetails,
+    createMeeting:createMeeting,
+    updateMeeting:updateMeeting,
+    getAllMeetings:getAllMeetings,
+    getMeetingListByUser:getMeetingListByUser,
+    deleteMeeting:deleteMeeting
+
+}

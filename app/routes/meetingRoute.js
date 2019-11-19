@@ -7,7 +7,7 @@ module.exports.setRouter = (app) => {
 
     let baseUrl = `${appConfig.apiVersion}/meetings`;
 
-    app.get(`${baseUrl}/:meetingId/meetingDetails`,meetingController.getSinglemeetingDetails);
+    app.get(`${baseUrl}/:meetingId/meetingDetails`,meetingController.getSingleMeetingDetails);
 
      /**
      * @api {get} /api/v1/meetings/:meetingId/meetingDetails get single meeting
@@ -50,7 +50,7 @@ module.exports.setRouter = (app) => {
 
     
 
-    app.post(`${baseUrl}/createmeeting`,meetingController.createmeeting);
+    app.post(`${baseUrl}/createMeeting`,meetingController.createMeeting);
 
     /**
      * @api {post} /api/v1/meetings/createmeeting create meeting
@@ -103,7 +103,7 @@ module.exports.setRouter = (app) => {
      */
 
 
-    app.put(`${baseUrl}/:meetingId/updatemeeting`,meetingController.updatemeeting);
+    app.put(`${baseUrl}/:meetingId/updatemeeting`,meetingController.updateMeeting);
 
       /**
      * @api {put} /api/v1/meetings/:meetingId/updatemeeting api for updating meeting
@@ -130,7 +130,49 @@ module.exports.setRouter = (app) => {
      *    }
      */
 
-    app.get(`${baseUrl}/:userId/meetingListByUser`,meetingController.getmeetingListByUser);
+    app.get(`${baseUrl}/view/all`,meetingController.getAllMeetings)
+     /**
+     * @api {get} /api/v1/meetings/view/all get all meetings
+     * @apiVersion 1.0.0
+     * @apiGroup meetings
+     * 
+     * 
+     * @apiParam {String} authToken of the user passed as a body parameter
+     * 
+     *  @apiSuccessExample {json} Success-Response:
+     *  {
+     *   "error":false,
+     *   "message":"meetings  List",
+     *   "status":200,
+     *   "data": [
+     *              {
+     *                 userId:"string",
+     *                userName:"string",
+     *                adminId:"string",
+     *                adminUserName:"string",
+     *                meetingId:"string",
+     *                meetingTitle:"string",
+     *                meetingPlace :"string",
+     *                meetingPurpose:"string",
+     *                meetingDate:"date",
+     *                meetingStartTime:"date",
+     *                meetingEndTime:"date",
+     *                created:"date",
+     *                modified:"date"
+     *              }
+     *           ]  
+     *  }
+     *   @apiErrorExample {json} Error-Response:
+     *    {
+     *      "error":true,
+     *      "message":"Error Occured",
+     *      "status":400/500/403,
+     *      "data":null
+     *    }
+     */
+
+
+    app.get(`${baseUrl}/:userId/meetingListByUser`,meetingController.getMeetingListByUser);
     
      /**
      * @api {get} /api/v1/meetings/:userId/meetingListByUser get all meetings of user
@@ -174,7 +216,7 @@ module.exports.setRouter = (app) => {
      */
 
 
-    app.post(`${baseUrl}/:meetingId/deletemeeting`,meetingController.deletemeeting);
+    app.post(`${baseUrl}/:meetingId/deletemeeting`,meetingController.deleteMeeting);
 
     /**
      * @api {post} /api/v1/users/deletemeeting delete meeting
