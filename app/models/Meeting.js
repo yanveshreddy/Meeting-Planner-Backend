@@ -5,43 +5,43 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-let eventSchema = new Schema({
+let meetingSchema = new Schema({
 
-    eventId: {
+    meetingId: {
         type: String,
         unique: true,
         index: true,
         required: true
     },
-    eventTitle: {
+    meetingTitle: {
         type: String,
         required: true,
         default: ''
     },
-    eventPurpose: {
+    meetingPurpose: {
         type: String,
         required: true,
         default: ''
     },
-    eventPlace: {
+    meetingPlace: {
         type: String,
         required: true,
         default: ''
     },
-    eventDate:{
+    meetingDate:{
         type:Date,
         required:true
     },
-    eventStartTime:{
+    meetingStartTime:{
         type:Date,
         required:true
     },
-    eventEndTime:{
+    meetingEndTime:{
         type:Date,
         required:true
     },
 
-    //event created by admin details
+    //meeting created by admin details
     adminId: {
         type: String,
         required: true
@@ -51,7 +51,7 @@ let eventSchema = new Schema({
         required: true
     },
 
-    //event assigned to user details
+    //meeting assigned to user details
     userId: {
         type: String,
         required: true
@@ -71,4 +71,4 @@ let eventSchema = new Schema({
 
 
 
-mongoose.model('Event', eventSchema);
+mongoose.model('Meeting', meetingSchema);

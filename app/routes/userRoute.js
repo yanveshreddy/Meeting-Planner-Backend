@@ -221,10 +221,10 @@ module.exports.setRouter = (app) => {
                 "authToken": "eyJhbGciOiJIUertyuiopojhgfdwertyuVCJ9.MCwiZXhwIjoxNTIwNDI29tIiwibGFzdE5hbWUiE4In19.hAR744xIY9K53JWm1rQ2mc",
                 "userDetails": {
                 "mobileNumber": 2234435524,
-                "email": "someone@mail.com",
-                "lastName": "Sengar",
-                "firstName": "Rishabh",
-                "userId": "-E9zxTYA8"
+                "email": "anvesh@gmail.com",
+                "lastName": "Reddy",
+                "firstName": "Anvesh",
+                "userId": "-K9zxTYA8"
             }
 
         }
