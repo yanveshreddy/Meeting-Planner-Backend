@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+//const router = express.Router();
 const meetingController = require("../controllers/meetingController");
 const appConfig = require("../../config/appConfig")
 
@@ -219,9 +219,9 @@ module.exports.setRouter = (app) => {
     app.post(`${baseUrl}/:meetingId/deletemeeting`,meetingController.deleteMeeting);
 
     /**
-     * @api {post} /api/v1/users/deletemeeting delete meeting
-     * @apiVersion 0.0.1
-     * @apiGroup post
+     * @api {post} /api/v1/meetings/deleteMeeting delete meeting
+     * @apiVersion 1.0.0
+     * @apiGroup meetings
      * 
      * 
      * @apiParam {String} authToken of the user passed as a body parameter

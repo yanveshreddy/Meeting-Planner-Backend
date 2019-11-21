@@ -10,7 +10,7 @@ const check = require('../libs/checkLib');
 
 /* Models */
 const UserModel = mongoose.model('User')
-
+const AuthModel=mongoose.model('Auth')
 
 // start user signup function 
 
@@ -84,8 +84,7 @@ let signUpFunction = (req, res) => {
                             countryCode: req.body.countryCode,
                             mobileNumber: req.body.mobileNumber,
                             email: req.body.email.toLowerCase(),
-                            password: passwordLib.hashpassword(req.body.password),
-                            createdOn: time.now()
+                            password: passwordLib.hashpassword(req.body.password)
 
                         })
 
@@ -166,7 +165,7 @@ let loginFunction = (req, res) => {
     let validatePassword = (retrievedUserDetails) => {
 
         return new Promise((resolve, reject) => {
-            passwordLib.comparePassword(req.body.password, retrievedUserDetails.password, (err, ismatch) => {
+            passwordLib.comparePassword(req.body.password, retrievedUserDetails.password, (err, isMatch) => {
 
                 if (err) {
                     console.log(err)
@@ -440,7 +439,51 @@ let resetPassword = (req, res) => {
 
 }
 
+let getAllUser =(req,res) =>{
 
+    UserModel.find()
+        .select(' -__v -_id')
+        .lean()
+        .exec((err, result) => {
+            if (err) {
+                console.log(err)
+                logger.error(err.message, 'User Controller: getAllUser', 10)
+                let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null)
+                res.send(apiResponse)
+            } else if (check.isEmpty(result)) {
+                logger.info('No User Found', 'User Controller: getAllUser')
+                let apiResponse = response.generate(true, 'No User Found', 404, null)
+                res.send(apiResponse)
+            } else {
+                let apiResponse = response.generate(false, 'All User Details Found', 200, result)
+                res.send(apiResponse)
+            }
+        })
+
+}
+
+let getSingleUser=(req,res) =>{
+    
+    UserModel.findOne({ 'userId': req.params.userId })
+        .select('-password -__v -_id')
+        .lean()
+        .exec((err, result) => {
+            if (err) {
+                console.log(err)
+                logger.error(err.message, 'User Controller: getSingleUser', 10)
+                let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null)
+                res.send(apiResponse)
+            } else if (check.isEmpty(result)) {
+                logger.info('No User Found', 'User Controller:getSingleUser')
+                let apiResponse = response.generate(true, 'No User Found', 404, null)
+                res.send(apiResponse)
+            } else {
+                let apiResponse = response.generate(false, 'User Details Found', 200, result)
+                res.send(apiResponse)
+            }
+        })
+
+}
 let logout = (req, res) => {
 
 
@@ -453,6 +496,8 @@ module.exports = {
     loginFunction: loginFunction,
     forgotPassword: forgotPassword,
     resetPassword:resetPassword,
+    getAllUser:getAllUser,
+    getSingleUser,getSingleUser,
     logout: logout
 
 }// end exports

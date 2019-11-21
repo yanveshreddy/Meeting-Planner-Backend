@@ -3,6 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+
 const app = express();
 const http = require('http');
 const appConfig = require('./config/appConfig');
@@ -23,21 +24,15 @@ app.use(routeLoggerMiddleware.logIp);
 app.use(globalErrorMiddleware.globalErrorHandler);
 
 
-app.use(express.static(path.join(__dirname, 'client')));
+//app.use(express.static(path.join(__dirname, 'client')));
 
 
 const modelsPath = './app/models';
 const controllersPath = './app/controllers';
 const libsPath = './app/libs';
 const middlewaresPath = './app/middlewares';
-const routesPath = './app/routes';
+const routesPath ='./app/routes'
 
-app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-    next();
-});
 
 //Bootstrap models
 fs.readdirSync(modelsPath).forEach(function (file) {
@@ -49,12 +44,20 @@ fs.readdirSync(modelsPath).forEach(function (file) {
 // Bootstrap route
 fs.readdirSync(routesPath).forEach(function (file) {
   if (~file.indexOf('.js')) {
+    console.log(file)
     let route = require(routesPath + '/' + file);
     route.setRouter(app);
   }
 });
 
 // end bootstrap route
+app.all('*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  next();
+});
+
 
 // calling global 404 handler after route
 

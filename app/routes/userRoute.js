@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+//const router = express.Router();
 const userController = require("../controllers/userController");
 const appConfig = require("../../config/appConfig")
 
@@ -8,7 +8,7 @@ module.exports.setRouter = (app) => {
     let baseUrl = `${appConfig.apiVersion}/users`;
 
 
-    app.get(`${baseUrl}/view/all`, auth.isAuthorized, userController.getAllUser);
+    app.get(`${baseUrl}/view/all`, userController.getAllUser);
     
     /**
 	  * @apiGroup users
@@ -50,7 +50,7 @@ module.exports.setRouter = (app) => {
 
 
     // params: userId.
-    app.get(`${baseUrl}/:userId/details`, auth.isAuthorized, userController.getSingleUser);
+    app.get(`${baseUrl}/:userId/details`,userController.getSingleUser);
     /**
      * @apiGroup users
      * @apiVersion  1.0.0
@@ -135,7 +135,7 @@ module.exports.setRouter = (app) => {
     
     // params: firstName, lastName, email, mobileNumber, password.
   
-    app.post(`${baseUrl}/login`, userController.loginFunction);
+    app.post(`${baseUrl}/signin`, userController.loginFunction);
 
     /**
      * @apiGroup users
