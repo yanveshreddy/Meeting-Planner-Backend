@@ -13,7 +13,7 @@ module.exports.setRouter = (app) => {
     /**
 	  * @apiGroup users
      * @apiVersion  1.0.0
-     * @api {post} /api/v1/users/view/all api to get allusers.*
+     * @api {get} /api/v1/users/view/all api to get allusers.*
 	 * @apiParam {String} authToken The token for authentication.(Send authToken as query parameter, body parameter or as a header)
 	 *
 	 *  @apiSuccessExample {json} Success-Response:

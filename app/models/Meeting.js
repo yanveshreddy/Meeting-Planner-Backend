@@ -13,34 +13,50 @@ let meetingSchema = new Schema({
         index: true,
         required: true
     },
-    meetingTitle: {
+    title: {
         type: String,
         required: true,
         default: ''
     },
-    meetingPurpose: {
+    purpose: {
         type: String,
         required: true,
         default: ''
     },
-    meetingPlace: {
+    place: {
         type: String,
         required: true,
         default: ''
     },
-    meetingDate:{
+    color: {
+        type: String,
+        default: '#1d71c5'
+    },
+    startDate:{
         type:Date,
         required:true
     },
-    meetingStartTime:{
-        type:Date,
+    startHour:{
+        type:Number,
         required:true
     },
-    meetingEndTime:{
-        type:Date,
+    startMinute: {
+        type: Number,
+        required: true
+    },
+    
+    endDate:{
+        type: Date,
         required:true
     },
-
+    endHour: {
+        type: Number,
+        required: true
+    },
+    endMinute: {
+        type: Number,
+        required: true
+    },
     //meeting created by admin details
     adminId: {
         type: String,

@@ -7,10 +7,10 @@ module.exports.setRouter = (app) => {
 
     let baseUrl = `${appConfig.apiVersion}/meetings`;
 
-    app.get(`${baseUrl}/:meetingId/meetingDetails`,meetingController.getSingleMeetingDetails);
+    app.get(`${baseUrl}/:meetingId/getSingleMeeting`,meetingController.getSingleMeetingDetails);
 
      /**
-     * @api {get} /api/v1/meetings/:meetingId/meetingDetails get single meeting
+     * @api {get} /api/v1/meetings/:meetingId/getSingleMeeting get single meeting
      * @apiVersion 1.0.0
      * @apiGroup meetings
      * 
@@ -103,10 +103,10 @@ module.exports.setRouter = (app) => {
      */
 
 
-    app.put(`${baseUrl}/:meetingId/updatemeeting`,meetingController.updateMeeting);
+    app.put(`${baseUrl}/:meetingId/updateMeeting`,meetingController.updateMeeting);
 
       /**
-     * @api {put} /api/v1/meetings/:meetingId/updatemeeting api for updating meeting
+     * @api {put} /api/v1/meetings/:meetingId/updateMeeting api for updating meeting
      * @apiVersion 1.0.0
      * @apiGroup meetings
      * 
@@ -172,10 +172,10 @@ module.exports.setRouter = (app) => {
      */
 
 
-    app.get(`${baseUrl}/:userId/meetingListByUser`,meetingController.getMeetingListByUser);
+    app.get(`${baseUrl}/:userId/getAllMeetingsByUser`,meetingController.getMeetingListByUser);
     
      /**
-     * @api {get} /api/v1/meetings/:userId/meetingListByUser get all meetings of user
+     * @api {get} /api/v1/meetings/:userId/getAllMeetingsByUser get all meetings of user
      * @apiVersion 1.0.0
      * @apiGroup meetings
      * 
@@ -216,7 +216,7 @@ module.exports.setRouter = (app) => {
      */
 
 
-    app.post(`${baseUrl}/:meetingId/deletemeeting`,meetingController.deleteMeeting);
+    app.put(`${baseUrl}/:meetingId/deleteMeeting`,meetingController.deleteMeeting);
 
     /**
      * @api {post} /api/v1/meetings/deleteMeeting delete meeting
