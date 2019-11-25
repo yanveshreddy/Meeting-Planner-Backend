@@ -23,7 +23,7 @@ let meetingSchema = new Schema({
         required: true,
         default: ''
     },
-    place: {
+    location: {
         type: String,
         required: true,
         default: ''
@@ -32,7 +32,7 @@ let meetingSchema = new Schema({
         type: String,
         default: '#1d71c5'
     },
-    startDate:{
+    start:{
         type:Date,
         required:true
     },
@@ -45,7 +45,7 @@ let meetingSchema = new Schema({
         required: true
     },
     
-    endDate:{
+    end:{
         type: Date,
         required:true
     },
@@ -72,10 +72,6 @@ let meetingSchema = new Schema({
         type: String,
         required: true
 
-    },
-    userName: {
-        type: String,
-        required: true
     }
     
 },

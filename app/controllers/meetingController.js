@@ -52,10 +52,10 @@ let createMeeting=(req,res) =>{
         meetingId:meetingId,
         title:req.body.title,
         purpose:req.body.purpose,
-        place:req.body.place,
+        location:req.body.location,
         color: req.body.color,
-        startDate: req.body.startDate,
-        endDate: req.body.endDate,
+        start: req.body.start,
+        end: req.body.end,
         startHour: req.body.startHour,
         startMinute: req.body.startMinute,
         endHour: req.body.endHour,
@@ -63,7 +63,7 @@ let createMeeting=(req,res) =>{
         adminId:req.body.adminId,
         adminUserName:req.body.adminUserName,
         userId:req.body.userId,
-        userName: req.body.userName
+        
     })
 
     newmeeting.save((err,result) =>{
@@ -125,13 +125,13 @@ let getAllMeetings=(req,res) =>{
     .exec((err, result) => {
 
         if (err) {
-            let apiResponse = response.response(true,'Failed to fetch list of meetings ',403, null)
+            let apiResponse = response.generate(true,'Failed to fetch list of meetings ',403, null)
             res.send(apiResponse)
         } else if (check.isEmpty(result)) {
-            let apiResponse = response.response(true,'meetings Are not found',500, null)
+            let apiResponse = response.generate(true,'meetings Are not found',500, null)
             res.send(apiResponse)
         } else {
-            let apiResponse = response.response(false,'List of meetings', 200, result)
+            let apiResponse = response.generate(false,'List of meetings', 200, result)
             res.send(apiResponse)
         }
        })
@@ -144,15 +144,15 @@ let getAllMeetings=(req,res) =>{
 
 let getMeetingListByUser=(req,res) =>{
 
-    meetingModel.find({userId:req.body.userId},(err,result)=>{
+    meetingModel.find({userId:req.params.userId},(err,result)=>{
         if (err) {
-            let apiResponse = response.response(true,'Failed to get meeting',403, null)
+            let apiResponse = response.generate(true,'Failed to get meeting',403, null)
             res.send(apiResponse)
         } else if (check.isEmpty(result)) {
-            let apiResponse = response.response(true,'meetings Are not found',500, null)
+            let apiResponse = response.generate(true,'meetings Are not found',500, null)
             res.send(apiResponse)
         } else {
-            let apiResponse = response.response(false,'meetings Are Listed', 200, result)
+            let apiResponse = response.generate(false,'meetings Are Listed', 200, result)
             res.send(apiResponse)
         }
        })

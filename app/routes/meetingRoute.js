@@ -216,7 +216,7 @@ module.exports.setRouter = (app) => {
      */
 
 
-    app.put(`${baseUrl}/:meetingId/deleteMeeting`,meetingController.deleteMeeting);
+    app.post(`${baseUrl}/:meetingId/deleteMeeting`,meetingController.deleteMeeting);
 
     /**
      * @api {post} /api/v1/meetings/deleteMeeting delete meeting
