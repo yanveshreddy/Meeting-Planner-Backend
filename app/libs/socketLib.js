@@ -60,20 +60,20 @@ let setServer = (server) => {
 
         //create notify code start
         socket.on('Create-Meeting', (data) => {
-            socket.broadcast.emit(`${data.userId} create`, data)
+            socket.broadcast.emit(`${data.userId}`, data)
         })
         //create notify code end
 
 
         //edit notify code start
         socket.on('Update-Meeting', (data) => {
-            socket.broadcast.emit(`${data.userId} update`, data)
+            socket.broadcast.emit(`${data.userId}`, data)
         })
         //edit notify code end
 
         //Delete code start
         socket.on('Delete-Meeting', (data) => {
-            socket.broadcast.emit(`${data.userId} delete`, data)
+            socket.broadcast.emit(`${data.userId}`, data)
         })
         //Delete code end
 
