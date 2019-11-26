@@ -4,7 +4,8 @@ const shortid = require('shortid');
 const logger = require('./loggerLib.js');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
-
+const meetingController = require("../controllers/meetingController");
+const meetingModel = mongoose.model('Meeting');
 // const tokenLib = require("./tokenLib.js");
 // const NotificationModel = mongoose.model('Notification')
 
@@ -20,6 +21,8 @@ let setServer = (server) => {
 
         socket.emit("verifyUser", "Some data");
         // code to verify the user and make him online
+
+        //listen to set User Code Start
 
         socket.on('set-user', (authToken) => {
 
@@ -55,6 +58,26 @@ let setServer = (server) => {
         }) // end of listening set-user event
 
 
+        //create notify code start
+        socket.on('Create-Meeting', (data) => {
+            socket.broadcast.emit(`${data.userId} create`, data)
+        })
+        //create notify code end
+
+
+        //edit notify code start
+        socket.on('Update-Meeting', (data) => {
+            socket.broadcast.emit(`${data.userId} update`, data)
+        })
+        //edit notify code end
+
+        //Delete code start
+        socket.on('Delete-Meeting', (data) => {
+            socket.broadcast.emit(`${data.userId} delete`, data)
+        })
+        //Delete code end
+
+
         socket.on('disconnect', () => {
             // disconnect the user from socket
             // remove the user from online list
@@ -62,7 +85,6 @@ let setServer = (server) => {
 
             console.log('\x1b[33m', "user is disconnected", '\x1b[0m');
             console.log(socket.userId);
-
 
             var removeIndex = allOnlineUsers.map(function (user) { return user.userId; }).indexOf(socket.userId);
             allOnlineUsers.splice(removeIndex, 1)
@@ -75,65 +97,44 @@ let setServer = (server) => {
 
         }) // end of on disconnect
 
+        //function for meeting starting alarm code start
+        setInterval( () =>{
+            meetingModel.find()
+                .select(' -__v -_id')
+                .lean()
+                .exec((err, result) => {
+                    if (err) {
+                        console.log(err)
+
+                    } else if (check.isEmpty(result)) {
+
+                    } else {
+                        let minutes = new Date().getMinutes()
+                        let hours = new Date().getHours()
+                        let month = new Date().getMonth()
+                        let day = new Date().getDay()
+
+                        for (let meeting of result) {
+                            meetingMonth = (new Date(meeting.start).getMonth())
+                            meetingDay = (new Date(meeting.start).getDay())
+                            if (minutes == meeting.startMinute - 30 && hours == meeting.startHour - 5 && month == meetingMonth && day == meetingDay) {
+                                meetingController.sendAlarmMail(meeting.userId, meeting.title, meeting.adminName)
+                                data = { adminName: meeting.adminName, userId: meeting.userId, title: meeting.title }
+                                myio.emit('alarm', data);
+                            }
+                        }
+
+                    }
+                })
+
+        }, 100000)
+        //staring for event starting code is end
 
 
+    })
 
-        //on notification event
-        socket.on('notification', (data) => {
-
-            //  data['notificationId'] = shortid.generate()
-
-            // console.log(data['notificationId'])
-            // event to save chat.
-            setTimeout(function () {
-                eventEmitter.emit('save-notification', data);
-
-            }, 2000)
-            myIo.emit(data.receiverId, data)
-
-        });//end of notification evnent
-
-    });//end of task event
 
 }
-
-
-// database operations are kept outside of socket.io code.
-
-// saving Notificationss to database.
-eventEmitter.on('save-notification', (data) => {
-
-    // let today = Date.now();
-
-    let notificationId = shortid.generate();
-
-    let newNotification = new NotificationModel({
-
-        notificationId: notificationId,
-        senderName: data.senderName,
-        senderId: data.senderId,
-        receiverName: data.receiverName || '',
-        receiverId: data.receiverId || '',
-        issueId: data.issueId,
-        message: data.message,
-        createdOn: data.createdOn
-
-    });
-
-    newNotification.save((err, result) => {
-        if (err) {
-            console.log(`error occurred: ${err}`);
-        }
-        else if (result == undefined || result == null || result == "") {
-            console.log("Notification Is Not Saved.");
-        }
-        else {
-            console.log("Notification Saved.");
-        }
-    });
-
-}); // end of saving chat.
-
 
 module.exports = {
     setServer: setServer

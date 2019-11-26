@@ -352,8 +352,8 @@ let forgotPassword = (req, res) => {
                 let transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                        user: 'vc17anvesh@gmail.com',
-                        pass: 'sehwag219'
+                        user: 'meetingplanner.helpdesk@gmail.com',
+                        pass: 'Mphelpdesk@004'
                     }
                 });
                 let mailOptions = {

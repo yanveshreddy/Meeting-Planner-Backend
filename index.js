@@ -122,7 +122,7 @@ function onListening() {
     : 'port ' + addr.port;
   ('Listening on ' + bind);
   logger.info('server listening on port' + addr.port, 'serverOnListeningHandler', 10);
-  let db = mongoose.connect(appConfig.db.uri);
+  let db = mongoose.connect(appConfig.db.uri,{useFindAndModify: false});
 }
 
 process.on('unhandledRejection', (reason, p) => {

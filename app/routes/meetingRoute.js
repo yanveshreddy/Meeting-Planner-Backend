@@ -242,10 +242,7 @@ module.exports.setRouter = (app) => {
      *      "data":null
      *    }
      */
-
+   
+    app.post(`${baseUrl}/sendalarmmail`,meetingController.sendAlarmMail);
     
-
-
-
-
 }
