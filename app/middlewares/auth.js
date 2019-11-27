@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
-const request = require("request")
+//const request = require("request")
 const Auth = mongoose.model('Auth')
 
 const logger = require('./../libs/loggerLib')

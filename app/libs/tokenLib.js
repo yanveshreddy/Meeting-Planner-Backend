@@ -15,7 +15,8 @@ let generateToken = (data, cb) => {
       data: data
     }
     let tokenDetails = {
-      token: jwt.sign(claims, secretKey)
+      token: jwt.sign(claims, secretKey),
+      tokenSecret : secretKey
     }
     cb(null, tokenDetails)
   } catch (err) {
@@ -24,7 +25,7 @@ let generateToken = (data, cb) => {
   }
 }// end generate token 
 
-let verifyClaim = (token, cb) => {
+let verifyClaim = (token,secretKey,cb) => {
   // verify a token symmetric
   jwt.verify(token, secretKey, function (err, decoded) {
     if(err){
@@ -62,6 +63,9 @@ let verifyClaimWithoutSecret = (token,cb) => {
  
   });
 }
+
+
+
 
 module.exports = {
   generateToken: generateToken,

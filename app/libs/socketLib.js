@@ -6,7 +6,8 @@ const events = require('events');
 const eventEmitter = new events.EventEmitter();
 const meetingController = require("../controllers/meetingController");
 const meetingModel = mongoose.model('Meeting');
-// const tokenLib = require("./tokenLib.js");
+const tokenLib = require("./tokenLib.js");
+const check = require('../libs/checkLib');
 // const NotificationModel = mongoose.model('Notification')
 
 let setServer = (server) => {
@@ -60,20 +61,24 @@ let setServer = (server) => {
 
         //create notify code start
         socket.on('Create-Meeting', (data) => {
-            socket.broadcast.emit(`${data.userId}`, data)
+
+            myIo.emit(`${data.userId} create`, data)
         })
         //create notify code end
 
 
         //edit notify code start
         socket.on('Update-Meeting', (data) => {
-            socket.broadcast.emit(`${data.userId}`, data)
+            console.log(data);
+            // myIo.broadcast.emit(data.userId, data)
+            myIo.emit(`${data.userId} update`,data);
         })
         //edit notify code end
 
         //Delete code start
         socket.on('Delete-Meeting', (data) => {
-            socket.broadcast.emit(`${data.userId}`, data)
+
+            myIo.emit(`${data.userId} delete`, data)
         })
         //Delete code end
 
@@ -118,9 +123,9 @@ let setServer = (server) => {
                             meetingMonth = (new Date(meeting.start).getMonth())
                             meetingDay = (new Date(meeting.start).getDay())
                             if (minutes == meeting.startMinute - 30 && hours == meeting.startHour - 5 && month == meetingMonth && day == meetingDay) {
-                                meetingController.sendAlarmMail(meeting.userId, meeting.title, meeting.adminName)
-                                data = { adminName: meeting.adminName, userId: meeting.userId, title: meeting.title }
-                                myio.emit('alarm', data);
+                                meetingController.sendAlarmMail(meeting.userId, meeting.title, meeting.adminUserName)
+                                data = { adminName: meeting.adminUserName, userId: meeting.userId, title: meeting.title ,minutes: minutes}
+                                myIo.emit('alarm', data);
                             }
                         }
 

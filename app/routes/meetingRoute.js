@@ -2,43 +2,49 @@ const express = require('express');
 //const router = express.Router();
 const meetingController = require("../controllers/meetingController");
 const appConfig = require("../../config/appConfig")
+const auth = require('../middlewares/auth');
 
 module.exports.setRouter = (app) => {
 
     let baseUrl = `${appConfig.apiVersion}/meetings`;
 
-    app.get(`${baseUrl}/:meetingId/getSingleMeeting`,meetingController.getSingleMeetingDetails);
+    app.get(`${baseUrl}/:meetingId/getSingleMeeting`,auth.isAuthorized,meetingController.getSingleMeetingDetails);
 
      /**
-     * @api {get} /api/v1/meetings/:meetingId/getSingleMeeting get single meeting
+     * @api {get} /api/v1/meetings/:meetingId/getSingleMeeting to get single meeting
      * @apiVersion 1.0.0
      * @apiGroup meetings
      * 
      * 
-     * @apiParam {String} authToken of the user passed as a body parameter
-     * @apiParam {String} meetingId of the user passed as a body parameter
+     * @apiParam {String} authToken of the user passed as a query parameter(required)
+     * @apiParam {String} meetingId of the user passed as a url parameter(required)
      * 
      * 
      *  @apiSuccessExample {json} Success-Response:
      *  {
      *   "error":false,
-     *   "message":"meeting Is Getting Successfully",
+     *   "message":"Details Found",
      *   "status":200,
-     *   "data": [
-     *              {
-     *                userId:"string",
-     *                meetingId:"string"
-     *                title:"string",
-     *                location :"string",
-     *                purpose:"string",
-     *                color:"string",
-     *                startDate:"number",
-     *                endDate:"number",
-     *                startMinute:"number",
-     *                endMinute:"number"
-     *              }
-     *           ]  
-     *  }
+     *    "data": {
+     *              "title": "meeting planner Review",
+     *              "purpose": "to test application update",
+     *              "location": "hyderabad",
+     *              "color": "#00ff00",
+     *              "meetingId": "47MChBzK",
+     *              "start": "2019-11-30T20:30:00.000Z",
+     *              "end": "2019-11-30T20:30:00.000Z",
+     *              "startHour": 1,
+     *              "startMinute": 33,
+     *              "endHour": 20,
+     *              "endMinute": 30,
+     *              "adminId": "2g4DtolR",
+     *              "adminUserName": "undefined",
+     *              "userId": "ERE32e8s",
+     *              "createdAt": "2019-11-25T20:26:57.707Z",
+     *              "updatedAt": "2019-11-27T11:54:53.645Z"
+     *            }
+     *   }
+     *               
      *   @apiErrorExample {json} Error-Response:
      *    {
      *      "error":true,
@@ -50,10 +56,10 @@ module.exports.setRouter = (app) => {
 
     
 
-    app.post(`${baseUrl}/createMeeting`,meetingController.createMeeting);
+    app.post(`${baseUrl}/createMeeting`,auth.isAuthorized,meetingController.createMeeting);
 
     /**
-     * @api {post} /api/v1/meetings/createmeeting create meeting
+     * @api {post} /api/v1/meetings/createmeeting api to create meeting
      * @apiVersion 1.0.0
      * @apiGroup meetings
      * 
@@ -75,23 +81,25 @@ module.exports.setRouter = (app) => {
      *   "error":false,
      *   "message":"meeting Is Created Successfully",
      *   "status":200,
-     *   "data": [
-     *              {
-     *                userId:"string",
-     *                userName:"string",
-     *                adminId:"string",
-     *                adminUserName:"string",
-     *                meetingId:"string",
-     *                meetingTitle:"string",
-     *                meetingPlace :"string",
-     *                meetingPurpose:"string",
-     *                meetingDate:"date",
-     *                meetingStartTime:"date",
-     *                meetingEndTime:"date",
-     *                created:"date",
-     *                modified:"date"
-     *              }
-     *           ]  
+     *   "data":
+     *           {
+     *              "title": "meeting planner Review",
+     *              "purpose": "to test application update",
+     *              "location": "hyderabad",
+     *              "color": "#00ff00",
+     *              "meetingId": "47MChBzK",
+     *              "start": "2019-11-30T20:30:00.000Z",
+     *              "end": "2019-11-30T20:30:00.000Z",
+     *              "startHour": 1,
+     *              "startMinute": 33,
+     *              "endHour": 20,
+     *              "endMinute": 30,
+     *              "adminId": "2g4DtolR",
+     *              "adminUserName": "undefined",
+     *              "userId": "ERE32e8s",
+     *              "createdAt": "2019-11-25T20:26:57.707Z",
+     *              "updatedAt": "2019-11-27T11:54:53.645Z"
+     *            }  
      *  }
      *   @apiErrorExample {json} Error-Response:
      *    {
@@ -103,10 +111,10 @@ module.exports.setRouter = (app) => {
      */
 
 
-    app.put(`${baseUrl}/:meetingId/updateMeeting`,meetingController.updateMeeting);
+    app.put(`${baseUrl}/:meetingId/updateMeeting`,auth.isAuthorized,meetingController.updateMeeting);
 
       /**
-     * @api {put} /api/v1/meetings/:meetingId/updateMeeting api for updating meeting
+     * @api {put} /api/v1/meetings/:meetingId/updateMeeting api to update meeting
      * @apiVersion 1.0.0
      * @apiGroup meetings
      * 
@@ -119,7 +127,11 @@ module.exports.setRouter = (app) => {
      *   "error":false,
      *   "message":"meeting Is Edited Successfully",
      *   "status":200,
-     *   "data": []  
+     *   "data": [
+     *              "n": 1,
+     *              "nModified": 1,
+     *               "ok": 1
+     *           ]  
      *  }
      *   @apiErrorExample {json} Error-Response:
      *    {
@@ -130,9 +142,9 @@ module.exports.setRouter = (app) => {
      *    }
      */
 
-    app.get(`${baseUrl}/view/all`,meetingController.getAllMeetings)
+    app.get(`${baseUrl}/view/all`,auth.isAuthorized,meetingController.getAllMeetings)
      /**
-     * @api {get} /api/v1/meetings/view/all get all meetings
+     * @api {get} /api/v1/meetings/view/all to get all meetings
      * @apiVersion 1.0.0
      * @apiGroup meetings
      * 
@@ -146,20 +158,42 @@ module.exports.setRouter = (app) => {
      *   "status":200,
      *   "data": [
      *              {
-     *                 userId:"string",
-     *                userName:"string",
-     *                adminId:"string",
-     *                adminUserName:"string",
-     *                meetingId:"string",
-     *                meetingTitle:"string",
-     *                meetingPlace :"string",
-     *                meetingPurpose:"string",
-     *                meetingDate:"date",
-     *                meetingStartTime:"date",
-     *                meetingEndTime:"date",
-     *                created:"date",
-     *                modified:"date"
-     *              }
+     *              "title": "meeting planner Review",
+     *              "purpose": "to test application update",
+     *              "location": "hyderabad",
+     *              "color": "#00ff00",
+     *              "meetingId": "47MChBzK",
+     *              "start": "2019-11-30T20:30:00.000Z",
+     *              "end": "2019-11-30T20:30:00.000Z",
+     *              "startHour": 1,
+     *              "startMinute": 33,
+     *              "endHour": 20,
+     *              "endMinute": 30,
+     *              "adminId": "2g4DtolR",
+     *              "adminUserName": "giri prasad",
+     *              "userId": "ERE32e8s",
+     *              "createdAt": "2019-11-25T20:26:57.707Z",
+     *              "updatedAt": "2019-11-27T11:54:53.645Z"
+     *            },
+     *            {
+     *              "title": "test notification mail updated",
+     *              "purpose": "to test application update",
+     *              "location": "hyderabad",
+     *              "color": "#00f500",
+     *              "meetingId": "27MChBzK",
+     *              "start": "2019-11-30T20:30:00.000Z",
+     *              "end": "2019-11-30T20:30:00.000Z",
+     *              "startHour": 1,
+     *              "startMinute": 33,
+     *              "endHour": 20,
+     *              "endMinute": 30,
+     *              "adminId": "5g4DtolR",
+     *              "adminUserName": "test admin",
+     *              "userId": "ERE32e8s",
+     *              "createdAt": "2019-11-25T20:26:57.707Z",
+     *              "updatedAt": "2019-11-27T11:54:53.645Z"
+     *            }    
+     * 
      *           ]  
      *  }
      *   @apiErrorExample {json} Error-Response:
@@ -172,10 +206,10 @@ module.exports.setRouter = (app) => {
      */
 
 
-    app.get(`${baseUrl}/:userId/getAllMeetingsByUser`,meetingController.getMeetingListByUser);
+    app.get(`${baseUrl}/:userId/getAllMeetingsByUser`,auth.isAuthorized,meetingController.getMeetingListByUser);
     
      /**
-     * @api {get} /api/v1/meetings/:userId/getAllMeetingsByUser get all meetings of user
+     * @api {get} /api/v1/meetings/:userId/getAllMeetingsByUser to get all meetings of user
      * @apiVersion 1.0.0
      * @apiGroup meetings
      * 
@@ -190,33 +224,55 @@ module.exports.setRouter = (app) => {
      *   "status":200,
      *   "data": [
      *              {
-     *                userId:"string",
-     *                userName:"string",
-     *                adminId:"string",
-     *                adminUserName:"string",
-     *                meetingId:"string",
-     *                meetingTitle:"string",
-     *                meetingPlace :"string",
-     *                meetingPurpose:"string",
-     *                meetingDate:"date",
-     *                meetingStartTime:"date",
-     *                meetingEndTime:"date",
-     *                created:"date",
-     *                modified:"date"
-     *              }
+     *              "title": "meeting planner Review",
+     *              "purpose": "to test application update",
+     *              "location": "hyderabad",
+     *              "color": "#00ff00",
+     *              "meetingId": "47MChBzK",
+     *              "start": "2019-11-30T20:30:00.000Z",
+     *              "end": "2019-11-30T20:30:00.000Z",
+     *              "startHour": 1,
+     *              "startMinute": 33,
+     *              "endHour": 20,
+     *              "endMinute": 30,
+     *              "adminId": "2g4DtolR",
+     *              "adminUserName": "giri prasad",
+     *              "userId": "ERE32e8s",
+     *              "createdAt": "2019-11-25T20:26:57.707Z",
+     *              "updatedAt": "2019-11-27T11:54:53.645Z"
+     *            },
+     *            {
+     *              "title": "test notification mail updated",
+     *              "purpose": "to test application update",
+     *              "location": "hyderabad",
+     *              "color": "#00f500",
+     *              "meetingId": "27MChBzK",
+     *              "start": "2019-11-30T20:30:00.000Z",
+     *              "end": "2019-11-30T20:30:00.000Z",
+     *              "startHour": 1,
+     *              "startMinute": 33,
+     *              "endHour": 20,
+     *              "endMinute": 30,
+     *              "adminId": "5g4DtolR",
+     *              "adminUserName": "test admin",
+     *              "userId": "ERE32e8s",
+     *              "createdAt": "2019-11-25T20:26:57.707Z",
+     *              "updatedAt": "2019-11-27T11:54:53.645Z"
+     *            }    
+     * 
      *           ]  
      *  }
      *   @apiErrorExample {json} Error-Response:
      *    {
      *      "error":true,
-     *      "message":"Error Occured while retriving all meetings",
+     *      "message":"Error Occured while retriving all meetings of a user",
      *      "status":500,
      *      "data":null
      *    }
      */
 
 
-    app.post(`${baseUrl}/:meetingId/deleteMeeting`,meetingController.deleteMeeting);
+    app.post(`${baseUrl}/:meetingId/deleteMeeting`,auth.isAuthorized,meetingController.deleteMeeting);
 
     /**
      * @api {post} /api/v1/meetings/deleteMeeting delete meeting
@@ -243,6 +299,5 @@ module.exports.setRouter = (app) => {
      *    }
      */
    
-    app.post(`${baseUrl}/sendalarmmail`,meetingController.sendAlarmMail);
     
 }

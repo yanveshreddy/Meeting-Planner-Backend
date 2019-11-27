@@ -417,6 +417,8 @@ let resetPassword = (req, res) => {
             } else {
                 logger.info('User Found', 'userController: findUser()', 10)
 
+
+
                 userDetails.password = passwordLib.hashpassword(req.body.password);
                 userDetails.resetPasswordToken = "";
 
@@ -427,7 +429,12 @@ let resetPassword = (req, res) => {
                         res.send(apiResponse)
                     }
                     else {
-                        let apiResponse = response.generate(false, 'Your Password Is Reset Successfully', 200, updatedUser)
+                        let updatedUserObj = updatedUser.toObject()
+                        delete updatedUserObj.password;
+                        delete updatedUserObj._id;
+                        delete updatedUserObj.__v;
+
+                        let apiResponse = response.generate(false, 'Your Password Is Reset Successfully', 200, updatedUserObj)
                         res.send(apiResponse)
                     }
                 })
@@ -445,7 +452,7 @@ let resetPassword = (req, res) => {
 let getAllUser = (req, res) => {
 
     UserModel.find()
-        .select(' -__v -_id')
+        .select('-password -__v -_id')
         .lean()
         .exec((err, result) => {
             if (err) {

@@ -20,7 +20,10 @@ const UserModel = mongoose.model('User')
 
 let getSingleMeetingDetails = (req, res) => {
 
-    meetingModel.findOne({ 'meetingId': req.params.meetingId }).exec((err, result) => {
+    meetingModel.findOne({ 'meetingId': req.params.meetingId })
+    .select('-__v -_id')
+    .lean()
+    .exec((err, result) => {
         if (err) {
             logger.error(err.message, 'meeting Controller: getSinglemeetingDetails', 10)
             let apiResponse = response.generate(true, "Failed to find meeting Details", 500, null);
@@ -32,7 +35,7 @@ let getSingleMeetingDetails = (req, res) => {
             res.send(apiResponse);
         }
         else {
-            let apiResponse = response.generate(false, "Details Found", 200, result);
+            let apiResponse = response.generate(false, "meeting Details Found", 200, result);
             res.send(apiResponse);
         }
     })
@@ -240,7 +243,7 @@ eventEmitter.on('sendMeetingCreatedMail', (data) => {
                     }
                 });
                 let mailOptions = {
-                    from: '"Meeting Planner HelpDesk"',
+                    from: 'meetingplanner.helpdesk@gmail.com',
                     to: userDetails.email,
                     subject: '"Meeting Created Alert"',
                     html: `<h2>Meeting scheduled</h2><br><h4>The Meeting ${data.title} has been scheduled </h4>
@@ -292,7 +295,7 @@ eventEmitter.on('sendMeetingUpdateMail', (data) => {
                     }
                 });
                 let mailOptions = {
-                    from: '"Meeting Planner HelpDesk"',
+                    from: 'meetingplanner.helpdesk@gmail.com',
                     to: userDetails.email,
                     subject: '"Meeting Updated Alert"',
                     html: `<h2>Meeting details are updated by ${data.adminUserName}</h2>
@@ -341,7 +344,7 @@ eventEmitter.on('sendMeetingDeleteMail', (data) => {
                     }
                 });
                 let mailOptions = {
-                    from: '"Meeting Planner HelpDesk"',
+                    from: 'meetingplanner.helpdesk@gmail.com',
                     to: userDetails.email,
                     subject: '"Meeting Planner Delete Alert"',
                     html: `<h2>Meeting Terminated</h2><br><h4>Your ${data.title} Meeting Is Cancelled by ${data.adminUserName}</h4>`
@@ -390,7 +393,7 @@ let sendAlarmMail = (userId, title, name) => {
                     }
                 });
                 let mailOptions = {
-                    from: '"Meeting Planner HelpDesk"',
+                    from: 'meetingplanner.helpdesk@gmail.com',
                     to: userDetails.email,
                     subject: '"Meeting Planner Alarm Alert"',
                     html: `<h2>Event started</h2><br><h4>The scheduled Meeting ${req.body.title} created by  ${req.body.adminName} has started </h4>`

@@ -80,12 +80,14 @@ server.on('listening', onListening);
 
 
 //socket.io connection handler
-// const socketLib = require('./app/libs/socketLib');
 
-// const socketServer = socketLib.setServer(server);
+ const socketLib = require('./app/libs/socketLib');
+
+ const socketServer = socketLib.setServer(server);
+ 
 // end of socket handler
 
-/**
+/*
  * Event listener for HTTP server "error" event.
  */
 
